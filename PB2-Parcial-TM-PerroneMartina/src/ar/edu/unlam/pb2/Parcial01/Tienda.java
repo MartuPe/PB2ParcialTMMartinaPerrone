@@ -47,7 +47,7 @@ public class Tienda {
 		clientes = new ArrayList<>();
 		vendedores = new HashSet<>();
 		ventas = new HashSet<>();
-		vendibles = new TreeSet<>();
+		vendibles = new HashSet<>();
 		stock = new HashMap<>();
 	}
 
@@ -70,7 +70,6 @@ public class Tienda {
 	}
 
 	public void agregarProducto(Producto producto, Integer stockInicial) {
-		this.agregarProducto(producto);
 		vendibles.add(producto);
 		// TODO: Agrega un producto a la coleccion de vendibles y pone en la coleccion
 		// de stocks al producto con su stock inicial
@@ -176,17 +175,39 @@ public class Tienda {
 		return null;
 	}
 
-	public void agregarServicioAVenta(String codigoVenta, Servicio servicio) {
+	public void agregarServicioAVenta(String codigoVenta, Servicio servicio) throws VendibleInexistenteException {	
+		Servicio encontrado = (Servicio) this.getVendible(servicio.getCodigo());
+		Venta ventaEncontrada = buscarVenta(codigoVenta);
+		Servicio copia = new Servicio(servicio.getCodigo(), servicio.getNombre(), servicio.getPrecio(), servicio.getFechaDeInicio(), servicio.getFechaDeFinalizacion());
+		
+		if(encontrado == null) {
+			throw new VendibleInexistenteException();
+		}else{
+			ventaEncontrada.agregarRenglon(copia, 1);
+		}
 		// TODO: Agrega un servicio a la venta. Recordar que los productos y servicios
 		// se traducen en renglones
 	}
 
 	public List<Producto> obtenerProductosCuyoStockEsMenorOIgualAlPuntoDeReposicion() {
+		
+		ArrayList<Producto> listaDeProductos = new ArrayList<>();
+		
+		for (Map.Entry<Producto, Integer> entry : stock.entrySet()) {
+			Producto key = entry.getKey();
+			Integer val = entry.getValue();
+			
+			if(val <= key.getPuntoDeReposicion()){
+				listaDeProductos.add(key);
+			}
+			
+		}
+		
 		// TODO: Obtiene una lista de productos cuyo stock es menor o igual al punto de
 		// reposicion. El punto de reposicion, es un valor que
 		// definimos de manera estrategica para que nos indique cuando debemos reponer
 		// stock para no quedarnos sin productos
-		return null;
+		return listaDeProductos;
 	}
 
 	public List<Cliente> obtenerClientesOrdenadosPorRazonSocialDescendente() {

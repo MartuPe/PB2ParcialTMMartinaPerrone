@@ -11,6 +11,22 @@ public class Servicio extends Item{
 		this.fechaDeFinalizacion = fechaDeFinalizacion;
 	}
 
+	public String getFechaDeInicio() {
+		return fechaDeInicio;
+	}
+
+	public void setFechaDeInicio(String fechaDeInicio) {
+		this.fechaDeInicio = fechaDeInicio;
+	}
+
+	public String getFechaDeFinalizacion() {
+		return fechaDeFinalizacion;
+	}
+
+	public void setFechaDeFinalizacion(String fechaDeFinalizacion) {
+		this.fechaDeFinalizacion = fechaDeFinalizacion;
+	}
+
 	// TODO: Completar con los getters y setters necesarios
 	
 }
