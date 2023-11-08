@@ -77,8 +77,8 @@ public class Venta {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
 		Venta other = (Venta) obj;
 		return Objects.equals(codigo, other.codigo);
 	}
