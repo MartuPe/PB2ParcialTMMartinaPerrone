@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Tienda {
 
@@ -139,11 +138,11 @@ public class Tienda {
 	public Producto obtenerProductoPorCodigo(Integer codigo) {
 		for (Map.Entry<Producto, Integer> entry : stock.entrySet()) {
 			Producto key = entry.getKey();
-			
-			if(key.getCodigo().equals(codigo)) {
+
+			if (key.getCodigo().equals(codigo)) {
 				return key;
 			}
-			
+
 		}
 		// TODO: Obtiene un producto de los posibles por su codigo. En caso de no
 		// encontrarlo se debera devolver null
@@ -153,14 +152,15 @@ public class Tienda {
 	public void agregarProductoAVenta(String codigoVenta, Producto producto) throws VendibleInexistenteException {
 		Producto encontrado = this.obtenerProductoPorCodigo(producto.getCodigo());
 		Venta ventaEncontrada = buscarVenta(codigoVenta);
-		Producto copia = new Producto(producto.getCodigo(), producto.getNombre(), producto.getPrecio(), producto.getPuntoDeReposicion());
-		
-		if(encontrado == null) {
+		Producto copia = new Producto(producto.getCodigo(), producto.getNombre(), producto.getPrecio(),
+				producto.getPuntoDeReposicion());
+
+		if (encontrado == null) {
 			throw new VendibleInexistenteException();
-		}else{
+		} else {
 			ventaEncontrada.agregarRenglon(copia, 1);
 		}
-		
+
 		// TODO: Agrega un producto a una venta. Si el vendible no existe (utilizando su
 		// codigo), se debe lanzar una VendibleInexistenteException
 		// Se debe actualizar el stock en la tienda del producto que se agrega a la
@@ -169,21 +169,22 @@ public class Tienda {
 
 	private Venta buscarVenta(String codigoVenta) {
 		for (Venta venta : ventas) {
-			if(venta.getCodigo().equals(codigoVenta)) {
+			if (venta.getCodigo().equals(codigoVenta)) {
 				return venta;
 			}
 		}
 		return null;
 	}
 
-	public void agregarServicioAVenta(String codigoVenta, Servicio servicio) throws VendibleInexistenteException {	
+	public void agregarServicioAVenta(String codigoVenta, Servicio servicio) throws VendibleInexistenteException {
 		Servicio encontrado = (Servicio) this.getVendible(servicio.getCodigo());
 		Venta ventaEncontrada = buscarVenta(codigoVenta);
-		Servicio copia = new Servicio(servicio.getCodigo(), servicio.getNombre(), servicio.getPrecio(), servicio.getFechaDeInicio(), servicio.getFechaDeFinalizacion());
-		
-		if(encontrado == null) {
+		Servicio copia = new Servicio(servicio.getCodigo(), servicio.getNombre(), servicio.getPrecio(),
+				servicio.getFechaDeInicio(), servicio.getFechaDeFinalizacion());
+
+		if (encontrado == null) {
 			throw new VendibleInexistenteException();
-		}else{
+		} else {
 			ventaEncontrada.agregarRenglon(copia, 1);
 		}
 		// TODO: Agrega un servicio a la venta. Recordar que los productos y servicios
@@ -191,19 +192,19 @@ public class Tienda {
 	}
 
 	public List<Producto> obtenerProductosCuyoStockEsMenorOIgualAlPuntoDeReposicion() {
-		
+
 		ArrayList<Producto> listaDeProductos = new ArrayList<>();
-		
+
 		for (Map.Entry<Producto, Integer> entry : stock.entrySet()) {
 			Producto key = entry.getKey();
 			Integer val = entry.getValue();
-			
-			if(val <= key.getPuntoDeReposicion()){
+
+			if (val <= key.getPuntoDeReposicion()) {
 				listaDeProductos.add(key);
 			}
-			
+
 		}
-		
+
 		// TODO: Obtiene una lista de productos cuyo stock es menor o igual al punto de
 		// reposicion. El punto de reposicion, es un valor que
 		// definimos de manera estrategica para que nos indique cuando debemos reponer
@@ -214,21 +215,36 @@ public class Tienda {
 	public List<Cliente> obtenerClientesOrdenadosPorRazonSocialDescendente() {
 		// TODO: obtiene una lista de clientes ordenados por su razon social de manera
 		// descendente
-		
+
 		Collections.sort(clientes, new ClientesOrdenadoPorRazonSocial());
-		
+
 		return clientes;
 	}
 
 	public Map<Vendedor, Set<Venta>> obtenerVentasPorVendedor() {
+
+		Map<Vendedor, Set<Venta>> reporte = new HashMap<>();
+
+		for (Venta venta : ventas) {
+			Vendedor vendedor = venta.getVendedor();
+
+			if (!reporte.containsKey(vendedor)) {
+				reporte.put(vendedor, new HashSet<Venta>());
+
+			} else {
+				reporte.get(vendedor).add(venta);
+
+			}
+		}
+		return reporte;
 		// TODO: Obtiene un mapa que contiene las ventas realizadas por cada vendedor.
-		return null;
+
 	}
 
 	public Double obtenerTotalDeVentasDeServicios() {
 		Double valorTotal = 0.0;
 		for (Vendible vendible : vendibles) {
-			if(vendible instanceof Servicio) {
+			if (vendible instanceof Servicio) {
 				valorTotal += vendible.getPrecio();
 			}
 		}

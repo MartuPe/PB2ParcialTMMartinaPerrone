@@ -4,8 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
+
 
 public class TiendaTest {
 
@@ -93,10 +98,45 @@ public class TiendaTest {
 		
 	}
 
-//	@Test
-//	public void queSePuedaObtenerUnMapaDeVentasRealizadasPorCadaVendedor() {
-//		// TODO: usar como key el vendedor y Set<Venta> para las ventas
-//	}
+	@Test
+	public void queSePuedaObtenerUnMapaDeVentasRealizadasPorCadaVendedor() throws VendedorDeLicenciaExceptionException {
+		
+		Tienda tienda = new Tienda("5156165", "Maxikiosko");
+		Vendedor vendedor = new Vendedor("46119380", "Martu");
+		Vendedor vendedor2 = new Vendedor("566545", "Martu");
+		Cliente cliente = new Cliente("27615846", "Monotributista");
+		Venta venta = new Venta("1", cliente, vendedor);
+		Venta venta2 = new Venta("2", cliente, vendedor);
+		Venta venta3 = new Venta("3", cliente, vendedor2);
+		Venta venta4 = new Venta("4", cliente, vendedor2);
+
+		tienda.agregarCliente(cliente);
+		tienda.agregarVendedor(vendedor);
+		tienda.agregarVendedor(vendedor2);
+		tienda.agregarVenta(venta);
+		tienda.agregarVenta(venta2);
+		tienda.agregarVenta(venta3);
+		tienda.agregarVenta(venta4);
+
+		
+		
+		 // Llamar al método a testear
+	    Map<Vendedor, Set<Venta>> reporte = tienda.obtenerVentasPorVendedor();
+	    
+	   
+
+
+//	    assertTrue(reporte.containsKey(vendedor)); 
+//	    assertTrue(reporte.containsValue(venta)); 
+//	    assertTrue(reporte.containsValue(venta2)); 
+//	    assertTrue(reporte.containsValue(venta3)); 
+
+	 
+	    assertEquals(2, reporte.get(vendedor).size());
+
+		
+		// TODO: usar como key el vendedor y Set<Venta> para las ventas
+	}
 
 	@Test
 	public void queSePuedaObtenerElTotalDeVentasDeServicios() {
@@ -104,7 +144,11 @@ public class TiendaTest {
 		Servicio servicio = new Servicio(1, "Manzana", 20.0, "22/03/2023", "24/08/2004");
 		Servicio servicio2 = new Servicio(1, "Kiwi", 80.0, "22/03/2023", "24/08/2004");
 		Servicio servicio3 = new Servicio(1, "Pera", 40.0, "22/03/2023", "24/08/2004");
-	
+		Producto producto3 = new Producto(3, "Naranja", 20.0, 6);
+		Producto producto4 = new Producto(4, "Sandia", 20.0, 6);
+		
+		tienda.agregarProducto(producto3);
+		tienda.agregarProducto(producto4);
 		tienda.agregarServicio(servicio);
 		tienda.agregarServicio(servicio2);
 		tienda.agregarServicio(servicio3);
@@ -119,5 +163,7 @@ public class TiendaTest {
 
 //	@Test
 //	public void queAlRealizarLaVentaDeUnProductoElStockSeActualiceCorrectamente() {
+//		
+//		
 //	}
 }
