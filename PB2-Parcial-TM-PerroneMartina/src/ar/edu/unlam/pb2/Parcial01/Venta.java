@@ -21,6 +21,7 @@ public class Venta {
 	
 
 	public void agregarRenglon(Vendible vendible, Integer cantidad) {
+		renglones.put(vendible, cantidad);
 		// TODO: Agregar el vendible a la venta 
 	}
 	

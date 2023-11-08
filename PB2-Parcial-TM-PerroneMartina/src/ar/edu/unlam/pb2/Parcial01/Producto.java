@@ -9,6 +9,14 @@ public class Producto extends Item{
 		this.puntoDeReposicion = puntoDeReposicion;
 	}
 
+	public Integer getPuntoDeReposicion() {
+		return puntoDeReposicion;
+	}
+
+	public void setPuntoDeReposicion(Integer puntoDeReposicion) {
+		this.puntoDeReposicion = puntoDeReposicion;
+	}
+
 	// TODO: Completar con los getters y setters necesarios
 	
 }

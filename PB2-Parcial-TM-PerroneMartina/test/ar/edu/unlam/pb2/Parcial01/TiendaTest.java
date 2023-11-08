@@ -20,11 +20,25 @@ public class TiendaTest {
 		
 		
 	}
-//
-//	@Test
-//	public void queAlIntentarAgregarUnVendibleInexistenteAUnaVentaSeLanceUnaVendibleInexistenteException() {
-//	}
-//
+
+	@Test (expected = VendibleInexistenteException.class)
+	public void queAlIntentarAgregarUnVendibleInexistenteAUnaVentaSeLanceUnaVendibleInexistenteException() throws VendedorDeLicenciaExceptionException, VendibleInexistenteException {
+		Tienda tienda = new Tienda("5156165", "Maxikiosko");
+		Vendedor vendedor = new Vendedor("46119380", "Martu");
+		Cliente cliente = new Cliente("27615846", "Monotributista");
+		Venta venta = new Venta("1", cliente, vendedor);
+		Producto producto = new Producto(1, "Manzana", 20.0, 6);
+
+		tienda.agregarStock(producto, 1);
+		tienda.agregarCliente(cliente);
+		tienda.agregarVendedor(vendedor);
+		tienda.agregarVenta(venta);
+		tienda.agregarProductoAVenta(venta.getCodigo(), producto);
+		
+		
+		
+	}
+
 //	@Test
 //	public void queSePuedaObtenerUnaListaDeProductosCuyoStockEsMenorOIgualAlPuntoDeReposicion() {
 //	}

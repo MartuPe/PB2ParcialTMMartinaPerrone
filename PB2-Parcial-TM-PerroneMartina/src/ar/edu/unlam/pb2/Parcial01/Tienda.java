@@ -1,10 +1,12 @@
 package ar.edu.unlam.pb2.Parcial01;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Tienda {
 
@@ -13,8 +15,7 @@ public class Tienda {
 	 * administrar la venta de productos o servicios de nuestra tienda. Venderemos
 	 * entonces, productos como mouse o teclados y servicios como el soporte tecnico
 	 * a domicilio. Sabemos que la tienda cuenta con items Vendibles que pueden ser
-	 * del tipo Producto o Servicio. 
-	 * Ademas, podemos registrar el stock de los
+	 * del tipo Producto o Servicio. Ademas, podemos registrar el stock de los
 	 * productos, los clientes a quienes les vendemos algun producto o servicio, las
 	 * ventas y los vendedores de la tienda. Antes de realizar alguna operacion, se
 	 * debera obtener el elemento correspondiente de las colecciones. Ejemplo: Si
@@ -46,11 +47,19 @@ public class Tienda {
 		clientes = new ArrayList<>();
 		vendedores = new HashSet<>();
 		ventas = new HashSet<>();
+		vendibles = new TreeSet<>();
+		stock = new HashMap<>();
 	}
 
 	// TODO: Completar con los getters y setters necesarios
 
 	public Vendible getVendible(Integer codigo) {
+
+		for (Vendible vendible : vendibles) {
+			if (vendible.getCodigo().equals(codigo)) {
+				return vendible;
+			}
+		}
 		// TODO: Obtiene un producto o servicio de la coleccion de vendibles utilizando
 		// el codigo. En caso de no existir devuelve null.
 		return null;
@@ -61,19 +70,26 @@ public class Tienda {
 	}
 
 	public void agregarProducto(Producto producto, Integer stockInicial) {
+		this.agregarProducto(producto);
+		vendibles.add(producto);
 		// TODO: Agrega un producto a la coleccion de vendibles y pone en la coleccion
 		// de stocks al producto con su stock inicial
 	}
 
 	public void agregarServicio(Servicio servicio) {
-		// TODO: Agrega un servicio a la coleccion de vendibles
+		vendibles.add(servicio);
 	}
 
 	public Integer getStock(Producto producto) {
 		return stock.get(producto);
 	}
 
-	public void agregarStock(Producto producto, Integer incremento){
+	public void agregarStock(Producto producto, Integer incremento) throws VendibleInexistenteException {
+		Producto productoExistente = (Producto) this.getVendible(producto.getCodigo());
+		if (productoExistente != null) {
+			stock.put(producto, incremento);
+		}
+
 		// TODO: se debe agregar stock a un producto existente
 	}
 
@@ -88,15 +104,15 @@ public class Tienda {
 	public void agregarVenta(Venta venta) throws VendedorDeLicenciaExceptionException {
 		Vendedor vendedor = buscarVendedorPordni(venta.getVendedor().getDni());
 		Cliente cliente = buscarClientePorCuit(venta.getCliente().getCuit());
-		
-		if(vendedor != null && cliente != null) {
-			if(!vendedor.isDeLicencia()) {
+
+		if (vendedor != null && cliente != null) {
+			if (!vendedor.isDeLicencia()) {
 				ventas.add(venta);
-			}else {
+			} else {
 				throw new VendedorDeLicenciaExceptionException();
 			}
 		}
-		
+
 		// TODO: Agrega una venta a la coleccion correspondiente. En caso de que el
 		// vendedor este de licencia, arroja una
 		// VendedorDeLicenciaException
@@ -104,7 +120,7 @@ public class Tienda {
 
 	private Cliente buscarClientePorCuit(String cuit) {
 		for (Cliente cliente : clientes) {
-			if(cliente.getCuit().equals(cuit)) {
+			if (cliente.getCuit().equals(cuit)) {
 				return cliente;
 			}
 		}
@@ -113,7 +129,7 @@ public class Tienda {
 
 	private Vendedor buscarVendedorPordni(String dni) {
 		for (Vendedor vendedor : vendedores) {
-			if(vendedor.getDni().equals(dni)) {
+			if (vendedor.getDni().equals(dni)) {
 				return vendedor;
 			}
 		}
@@ -121,17 +137,43 @@ public class Tienda {
 	}
 
 	public Producto obtenerProductoPorCodigo(Integer codigo) {
+		for (Map.Entry<Producto, Integer> entry : stock.entrySet()) {
+			Producto key = entry.getKey();
+			
+			if(key.getCodigo().equals(codigo)) {
+				return key;
+			}
+			
+		}
 		// TODO: Obtiene un producto de los posibles por su codigo. En caso de no
 		// encontrarlo se debera devolver null
 		return null;
 	}
 
-	public void agregarProductoAVenta(String codigoVenta, Producto producto) {
-
+	public void agregarProductoAVenta(String codigoVenta, Producto producto) throws VendibleInexistenteException {
+		Producto encontrado = this.obtenerProductoPorCodigo(producto.getCodigo());
+		Venta ventaEncontrada = buscarVenta(codigoVenta);
+		Producto copia = new Producto(producto.getCodigo(), producto.getNombre(), producto.getPrecio(), producto.getPuntoDeReposicion());
+		
+		if(encontrado == null) {
+			throw new VendibleInexistenteException();
+		}else{
+			ventaEncontrada.agregarRenglon(copia, 1);
+		}
+		
 		// TODO: Agrega un producto a una venta. Si el vendible no existe (utilizando su
 		// codigo), se debe lanzar una VendibleInexistenteException
 		// Se debe actualizar el stock en la tienda del producto que se agrega a la
 		// venta
+	}
+
+	private Venta buscarVenta(String codigoVenta) {
+		for (Venta venta : ventas) {
+			if(venta.getCodigo().equals(codigoVenta)) {
+				return venta;
+			}
+		}
+		return null;
 	}
 
 	public void agregarServicioAVenta(String codigoVenta, Servicio servicio) {
