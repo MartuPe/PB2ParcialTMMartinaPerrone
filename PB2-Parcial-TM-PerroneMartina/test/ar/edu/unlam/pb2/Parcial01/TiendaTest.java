@@ -97,11 +97,26 @@ public class TiendaTest {
 //	public void queSePuedaObtenerUnMapaDeVentasRealizadasPorCadaVendedor() {
 //		// TODO: usar como key el vendedor y Set<Venta> para las ventas
 //	}
-//
-//	@Test
-//	public void queSePuedaObtenerElTotalDeVentasDeServicios() {
-//	}
-//
+
+	@Test
+	public void queSePuedaObtenerElTotalDeVentasDeServicios() {
+		Tienda tienda = new Tienda("5156165", "Maxikiosko");
+		Servicio servicio = new Servicio(1, "Manzana", 20.0, "22/03/2023", "24/08/2004");
+		Servicio servicio2 = new Servicio(1, "Kiwi", 80.0, "22/03/2023", "24/08/2004");
+		Servicio servicio3 = new Servicio(1, "Pera", 40.0, "22/03/2023", "24/08/2004");
+	
+		tienda.agregarServicio(servicio);
+		tienda.agregarServicio(servicio2);
+		tienda.agregarServicio(servicio3);
+		
+		Double ve = 140.0;
+		Double vo = tienda.obtenerTotalDeVentasDeServicios();
+		
+		assertEquals(ve, vo);
+		
+		
+	}
+
 //	@Test
 //	public void queAlRealizarLaVentaDeUnProductoElStockSeActualiceCorrectamente() {
 //	}

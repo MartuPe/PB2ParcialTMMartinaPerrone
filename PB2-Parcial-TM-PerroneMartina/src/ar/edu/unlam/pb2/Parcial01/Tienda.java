@@ -226,10 +226,16 @@ public class Tienda {
 	}
 
 	public Double obtenerTotalDeVentasDeServicios() {
+		Double valorTotal = 0.0;
+		for (Vendible vendible : vendibles) {
+			if(vendible instanceof Servicio) {
+				valorTotal += vendible.getPrecio();
+			}
+		}
 		// TODO: obtiene el total acumulado de los vendibles que son servicios incluidos
 		// en todas las ventas.
 		// Si una venta incluye productos y servicios, solo nos interesa saber el total
 		// de los servicios
-		return null;
+		return valorTotal;
 	}
 }
