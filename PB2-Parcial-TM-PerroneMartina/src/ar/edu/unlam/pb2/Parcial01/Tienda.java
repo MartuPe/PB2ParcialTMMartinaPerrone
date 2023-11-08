@@ -1,5 +1,7 @@
 package ar.edu.unlam.pb2.Parcial01;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +13,8 @@ public class Tienda {
 	 * administrar la venta de productos o servicios de nuestra tienda. Venderemos
 	 * entonces, productos como mouse o teclados y servicios como el soporte tecnico
 	 * a domicilio. Sabemos que la tienda cuenta con items Vendibles que pueden ser
-	 * del tipo Producto o Servicio. Ademas, podemos registrar el stock de los
+	 * del tipo Producto o Servicio. 
+	 * Ademas, podemos registrar el stock de los
 	 * productos, los clientes a quienes les vendemos algun producto o servicio, las
 	 * ventas y los vendedores de la tienda. Antes de realizar alguna operacion, se
 	 * debera obtener el elemento correspondiente de las colecciones. Ejemplo: Si
@@ -38,8 +41,11 @@ public class Tienda {
 	private Set<Vendedor> vendedores;
 
 	public Tienda(String cuit, String nombre) {
-
-		// TODO: Completar el constructor para el correcto funcionamiento del software
+		this.cuit = cuit;
+		this.nombre = nombre;
+		clientes = new ArrayList<>();
+		vendedores = new HashSet<>();
+		ventas = new HashSet<>();
 	}
 
 	// TODO: Completar con los getters y setters necesarios
@@ -79,10 +85,39 @@ public class Tienda {
 		vendedores.add(vendedor);
 	}
 
-	public void agregarVenta(Venta venta) {
+	public void agregarVenta(Venta venta) throws VendedorDeLicenciaExceptionException {
+		Vendedor vendedor = buscarVendedorPordni(venta.getVendedor().getDni());
+		Cliente cliente = buscarClientePorCuit(venta.getCliente().getCuit());
+		
+		if(vendedor != null && cliente != null) {
+			if(!vendedor.isDeLicencia()) {
+				ventas.add(venta);
+			}else {
+				throw new VendedorDeLicenciaExceptionException();
+			}
+		}
+		
 		// TODO: Agrega una venta a la coleccion correspondiente. En caso de que el
 		// vendedor este de licencia, arroja una
 		// VendedorDeLicenciaException
+	}
+
+	private Cliente buscarClientePorCuit(String cuit) {
+		for (Cliente cliente : clientes) {
+			if(cliente.getCuit().equals(cuit)) {
+				return cliente;
+			}
+		}
+		return null;
+	}
+
+	private Vendedor buscarVendedorPordni(String dni) {
+		for (Vendedor vendedor : vendedores) {
+			if(vendedor.getDni().equals(dni)) {
+				return vendedor;
+			}
+		}
+		return null;
 	}
 
 	public Producto obtenerProductoPorCodigo(Integer codigo) {
