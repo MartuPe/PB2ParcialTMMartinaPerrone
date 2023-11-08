@@ -1,5 +1,6 @@
 package ar.edu.unlam.pb2.Parcial01;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -66,10 +67,31 @@ public class TiendaTest {
 		
 	}
 
-//	@Test
-//	public void queSePuedaObtenerUnListDeClientesOrdenadosPorRazonSocialDescendente() {
-//		
-//	}
+	@Test
+	public void queSePuedaObtenerUnListDeClientesOrdenadosPorRazonSocialDescendente() {
+		Tienda tienda = new Tienda("5156165", "Maxikiosko");
+		Cliente cliente = new Cliente("27615846", "m");
+		Cliente cliente2 = new Cliente("27615846", "a");
+		Cliente cliente3 = new Cliente("27615846", "b");
+		Cliente cliente4 = new Cliente("27615846", "e");
+		Cliente cliente5 = new Cliente("27615846", "c");
+		
+		tienda.agregarCliente(cliente);
+		tienda.agregarCliente(cliente2);
+		tienda.agregarCliente(cliente3);
+		tienda.agregarCliente(cliente4);
+		tienda.agregarCliente(cliente5);
+		
+		ArrayList<Cliente> clientesOrdenados =  (ArrayList<Cliente>) tienda.obtenerClientesOrdenadosPorRazonSocialDescendente();
+		
+		assertEquals(clientesOrdenados.get(0), cliente);
+		assertEquals(clientesOrdenados.get(1), cliente4);
+		assertEquals(clientesOrdenados.get(2), cliente5);
+		assertEquals(clientesOrdenados.get(3), cliente3);
+		assertEquals(clientesOrdenados.get(4), cliente2);
+		
+		
+	}
 
 //	@Test
 //	public void queSePuedaObtenerUnMapaDeVentasRealizadasPorCadaVendedor() {

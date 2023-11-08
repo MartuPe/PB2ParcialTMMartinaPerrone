@@ -1,6 +1,7 @@
 package ar.edu.unlam.pb2.Parcial01;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -213,7 +214,10 @@ public class Tienda {
 	public List<Cliente> obtenerClientesOrdenadosPorRazonSocialDescendente() {
 		// TODO: obtiene una lista de clientes ordenados por su razon social de manera
 		// descendente
-		return null;
+		
+		Collections.sort(clientes, new ClientesOrdenadoPorRazonSocial());
+		
+		return clientes;
 	}
 
 	public Map<Vendedor, Set<Venta>> obtenerVentasPorVendedor() {
